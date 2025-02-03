@@ -114,7 +114,7 @@ async def classify_number(number: str):
             is_prime=is_prime(num),
             is_perfect=is_perfect(num),
             properties=get_number_properties(num),
-            class_sum=get_digit_sum(num),
+            digit_sum=get_digit_sum(num),
             fun_fact=get_fun_fact(num)
         )
     except ValueError:
