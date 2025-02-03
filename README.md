@@ -96,13 +96,6 @@ You should see a log message:
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
 
-bash
-uvicorn main:app --reload
-
-You should see a log message:
-
-INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-
 ## Making Requests
 
 ### Using cURL
