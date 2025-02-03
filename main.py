@@ -102,15 +102,20 @@ async def classify_number(number: str):
     Returns:
         JSON object containing number properties
     """
-    num = int(number)
-    if math.isnan(num):
-        return ErrorResponse(number=number)
+    try:
+        num = int(number)
+        if math.isnan(num):
+            return ErrorResponse(number=number)
+            # raise HTTPException(
+            #     status_code=400, detail="Negative numbers are not supported")
 
-    return NumberResponse(
-        number=num,
-        is_prime=is_prime(num),
-        is_perfect=is_perfect(num),
-        properties=get_number_properties(num),
-        digit_sum=get_digit_sum(num),
-        fun_fact=get_fun_fact(num)
+        return NumberResponse(
+            number=num,
+            is_prime=is_prime(num),
+            is_perfect=is_perfect(num),
+            properties=get_number_properties(num),
+            digit_sum=get_digit_sum(num),
+            fun_fact=get_fun_fact(num)
     )
+    except ValueError:
+        return ErrorResponse(number=number) 
