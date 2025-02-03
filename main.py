@@ -28,7 +28,7 @@ class NumberResponse(BaseModel):
     is_prime: bool
     is_perfect: bool
     properties: List[str]
-    class_sum: int
+    digit_sum: int
     fun_fact: str
 
 
