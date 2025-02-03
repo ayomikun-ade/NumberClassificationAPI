@@ -66,14 +66,16 @@ def get_number_properties(n: int) -> List[str]:
     """Get all properties of a number."""
     properties = []
 
+    if is_armstrong(n):
+        properties.append("armstrong")
+        
     # Check basic properties
     if n % 2 == 0:
         properties.append("even")
     else:
         properties.append("odd")
 
-    if is_armstrong(n):
-        properties.append("armstrong")
+    
 
     # Add more properties as needed
     return properties
