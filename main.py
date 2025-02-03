@@ -51,15 +51,16 @@ def is_perfect(n: int) -> bool:
 
 
 def is_armstrong(n: int) -> bool:
-    """Check if a number is an Armstrong number."""
-    num_str = str(n)
+    """Check if a number is an Armstrong number (decided to ignore the negative sign when negative integers are passed)"""    
+    num_str = str(abs(n))  
     power = len(num_str)
-    return sum(int(digit) ** power for digit in num_str) == n
+    return sum(int(digit) ** power for digit in num_str) == abs(n)
 
 
 def get_digit_sum(n: int) -> int:
-    """Calculate the sum of digits."""
-    return sum(int(digit) for digit in str(n))
+    """Calculate the sum of digits. (Decided to ignore the negative sign when negative integers are passed)"""
+    # return sum(int(digit) for digit in str(n))
+    return sum(int(digit) for digit in str(abs(n)))
 
 
 def get_number_properties(n: int) -> List[str]:
@@ -75,8 +76,6 @@ def get_number_properties(n: int) -> List[str]:
     else:
         properties.append("odd")
 
-    
-
     # Add more properties as needed
     return properties
 
@@ -87,9 +86,9 @@ def get_fun_fact(n: int) -> str:
         response = requests.get(f"http://numbersapi.com/{n}/math")
         if response.status_code == 200:
             return response.text
-        return f"{n} is an Armstrong number because {'^3 + '.join(str(n))}^3 = {n}" if is_armstrong(n) else f"The digit sum of {n} is {get_digit_sum(n)}"
-    except:
-        return f"The digit sum of {n} is {get_digit_sum(n)}"
+    except requests.exceptions.RequestException:
+        return "Fun fact unavailable at the moment."
+    return "No fun fact available."
 
 
 @app.get("/api/classify-number", response_model=Union[NumberResponse, ErrorResponse])
@@ -103,19 +102,15 @@ async def classify_number(number: str):
     Returns:
         JSON object containing number properties
     """
-    try:
-        num = int(number)
-        if num < 0:
-            raise HTTPException(
-                status_code=400, detail="Negative numbers are not supported")
+    num = int(number)
+    if math.isnan(num):
+        return ErrorResponse(number=number)
 
-        return NumberResponse(
-            number=num,
-            is_prime=is_prime(num),
-            is_perfect=is_perfect(num),
-            properties=get_number_properties(num),
-            digit_sum=get_digit_sum(num),
-            fun_fact=get_fun_fact(num)
-        )
-    except ValueError:
-        return ErrorResponse(number=number) 
+    return NumberResponse(
+        number=num,
+        is_prime=is_prime(num),
+        is_perfect=is_perfect(num),
+        properties=get_number_properties(num),
+        digit_sum=get_digit_sum(num),
+        fun_fact=get_fun_fact(num)
+    )
